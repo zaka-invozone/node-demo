@@ -97,4 +97,4 @@ jobs:
           cd /home/node-demo
           git pull
           git status
-          pm2 reload
+          pm2 reload app
