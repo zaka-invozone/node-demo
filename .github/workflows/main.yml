@@ -90,8 +90,8 @@ jobs:
       with:
         host: 173.249.36.58
         username: root
-        #key: ${{ secrets.SSH_PRIV }}
-        password: ${{ secrets.pwd }}
+        key: ${{ secrets.SSH_PRIV }}
+        #password: ${{ secrets.pwd }}
         port: 22
         script: |
           cd /home/node-demo
