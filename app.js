@@ -4,7 +4,7 @@ import express from 'express';
 import routes from './source/routes/route.js';
 // constant variables 
 const app = express();
-const PORT = 3000;
+const PORT = 3030;
 const HOST = '0.0.0.0';
 // body parser setup for Express v4.16.0 and higher
 app.use(express.json());
