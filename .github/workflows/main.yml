@@ -50,20 +50,26 @@ jobs:
           format: 'HTML'    
           args: >
             --enableRetired
-      - name: Upload Test results
+      - name: Upload Test results 
         uses: actions/upload-artifact@master
         with:
-           name: Depcheck report
-           path: ${{github.workspace}}/reports/
-      - name: Install dependencies
-        uses: hkusu/s3-upload-action@v2
+           name: depcheck-report
+           path: /github/workspace/reports/dependency-check-report.html
+  s3-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: depcheck-report
+   
+      - uses: hkusu/s3-upload-action@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-central-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: /test
-          file-path: '/github/workspace/reports/dependency-check-report.html'
+          file-path: './dependency-check-report.html'
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
