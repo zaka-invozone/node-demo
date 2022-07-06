@@ -41,37 +41,19 @@ jobs:
         run: |
           npm run build
           npm run test
-
-
-  s3-upload:
-    runs-on: ubuntu-latest
-    needs: [build_test]
-
-    steps:
-    
-
-      - uses: dependency-check/Dependency-Check_Action@main
+      - name: Depcheck
+        uses: dependency-check/Dependency-Check_Action@main
         id: Depcheck
         with:
           project: 'test'
-          path: '/home/runner/work/node-demo/node-demo'
+          path: '.'
           format: 'HTML'    
           args: >
+            --failOnCVSS 7
             --enableRetired
-      - uses: actions/upload-artifact@master
+      - name: Upload Test results      
+        uses: actions/upload-artifact@master
         with:
-           name: depcheck-report
-           path: /github/workspace/reports/dependency-check-report.html
-      - uses: actions/download-artifact@v2
-        with:
-          name: depcheck-report
-   
-      - uses: hkusu/s3-upload-action@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'eu-central-1'
-          aws-bucket: ${{ secrets.AWS_BUCKET }}
-          destination-dir: /test
-          file-path: './dependency-check-report.html'
+           name: Depcheck report
+           path: ${{github.workspace}}/reports
 
