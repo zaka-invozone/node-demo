@@ -41,25 +41,27 @@ jobs:
         run: |
           npm run build
           npm run test
-      - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        with:
-          project: 'test'
-          path: '.'
-          format: 'HTML'    
-          args: >
-            --enableRetired
-      - name: Upload Test results 
-        uses: actions/upload-artifact@master
-        with:
-           name: depcheck-report
-           path: /github/workspace/reports/dependency-check-report.html
+
+
   s3-upload:
     runs-on: ubuntu-latest
     needs: [build_test]
 
     steps:
+    
+
+      - uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        with:
+          project: 'test'
+          path: '/home/runner/work/node-demo/node-demo'
+          format: 'HTML'    
+          args: >
+            --enableRetired
+      - uses: actions/upload-artifact@master
+        with:
+           name: depcheck-report
+           path: /github/workspace/reports/dependency-check-report.html
       - uses: actions/download-artifact@v2
         with:
           name: depcheck-report
@@ -72,21 +74,4 @@ jobs:
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: /test
           file-path: './dependency-check-report.html'
-  deploy:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    needs: [build_test]
-    steps:
-    - name: SSH Connection
-      uses: appleboy/ssh-action@master
-      with:
-        host: 173.249.36.58
-        username: root
-        key: ${{ secrets.SSH_PRIV }}
-        #password: ${{ secrets.pwd }}
-        port: 22
-        script: |
-          cd /home/node-demo
-          git pull
-          git status
-          pm2 reload app
+
