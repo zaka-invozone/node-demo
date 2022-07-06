@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
            name: Depcheck report
-           path: ${{github.workspace}}/reports/test
+           path: ${{github.workspace}}/reports/
       - name: Install dependencies
         uses: hkusu/s3-upload-action@v2
         with:
@@ -63,7 +63,7 @@ jobs:
           aws-region: 'eu-central-1'
           aws-bucket: ${{ secrets.AWS_BUCKET }}
           destination-dir: /test
-          file-path: '/github/workspace/reports/test/dependency-check-report.html'
+          file-path: '/github/workspace/reports/dependency-check-report.html'
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
