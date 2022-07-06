@@ -49,7 +49,6 @@ jobs:
           path: '.'
           format: 'HTML'    
           args: >
-            --failOnCVSS 7
             --enableRetired
       - name: Install dependencies
         uses: hkusu/s3-upload-action@v2
